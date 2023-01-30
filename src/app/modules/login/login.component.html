@@ -1,0 +1,22 @@
+<div>
+    <form [formGroup]="loginForm" class="pt-5">
+        <div class="flex flex-column pb-4">
+            <label for="username">Usuário</label>
+            <input id="username" type="text" pInputText formControlName="userControl">
+            <small [ngClass]="{'hidden' : loginForm.get('userControl')?.valid || !loginForm.get('userControl')?.touched}" id="username-help" class="p-error block">Usuário inválido.</small>
+        </div>
+        <div class="flex flex-column pb-4">
+            <label for="password">Senha</label>
+            <input id="password" type="password" pInputText formControlName="passwordControl" (keyup.enter)="login()">
+            <small [ngClass]="{'hidden' : loginForm.get('passwordControl')?.valid || !loginForm.get('passwordControl')?.touched}" id="password-help" class="p-error block">Senha inválida.</small>
+        </div>
+    
+        <div class="pb-3">
+            <button (click)="login()">Entrar</button>
+        </div>
+    
+        <div class="flex justify-content-center">
+            <a class="forgot-password" href="">Esqueci minha senha</a>
+        </div>
+    </form>
+</div>
