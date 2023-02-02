@@ -1,3 +1,4 @@
+import { LogoutComponent } from './modules/logout/logout.component';
 import { LoginGuardService } from './shared/guards/login-guard.service';
 import { QuestionComponent } from './modules/question/question.component';
 import { CategoryComponent } from './modules/category/category.component';
@@ -10,6 +11,7 @@ import { AuthGuardChildService } from './shared/guards/auth-guard-child.service'
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [LoginGuardService] },
+  { path: 'logout', component: LogoutComponent },
   {
     path: '', component: MainStructureComponent, canActivate: [AuthGuardService], canActivateChild: [AuthGuardChildService],
     children: [

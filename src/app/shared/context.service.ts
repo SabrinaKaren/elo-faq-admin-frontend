@@ -13,7 +13,9 @@ export class ContextService {
   ) { }
 
   saveUserData(user: any) {
-    window.sessionStorage.setItem(this.__elo_faq_admin_token, JSON.stringify(user));
+    if (user && Object.keys(user).length > 0) {
+      window.sessionStorage.setItem(this.__elo_faq_admin_token, JSON.stringify(user));
+    }
   }
 
   getUserData(): any {
