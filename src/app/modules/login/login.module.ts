@@ -6,6 +6,7 @@ import { AppRoutingModule } from 'src/app/app-routing.module';
 import { RouterModule } from '@angular/router';
 import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
+import { ProgressBarModule } from 'primeng/progressbar';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { MessageModule } from 'primeng/message';
     ReactiveFormsModule,
     FormsModule,
     MessagesModule,
-    MessageModule
+    MessageModule,
+    ProgressBarModule
   ],
   exports: [
     LoginComponent

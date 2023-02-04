@@ -1,6 +1,7 @@
 <div class="login-content">
     <p-message *ngIf="errorMsg" severity="error" [text]="errorMsg"></p-message>
 	<div class="main">
+        <p-progressBar *ngIf="loading" mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
         <div class="signup">
             <form [formGroup]="loginForm">
                 <label aria-hidden="true">Login</label>
