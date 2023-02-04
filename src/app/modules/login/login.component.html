@@ -1,10 +1,9 @@
 <div class="login-content">
+    <p-message *ngIf="errorMsg" severity="error" [text]="errorMsg"></p-message>
 	<div class="main">
         <div class="signup">
             <form [formGroup]="loginForm">
                 <label aria-hidden="true">Login</label>
-                <!-- <input id="username" type="text" pInputText formControlName="userControl">
-                <input type="email" name="email" placeholder="Email" required=""> -->
                 <div>
                     <input id="username" type="text" placeholder="Usuário" pInputText formControlName="userControl">
                     <small [ngClass]="{'hidden' : loginForm.get('userControl')?.valid || !loginForm.get('userControl')?.touched}" id="username-help" class="p-error block">Usuário inválido.</small>
@@ -15,26 +14,6 @@
                 </div>
                 <button type="button" (click)="login()">Entrar</button>
             </form>
-            <!-- <form [formGroup]="loginForm" class="pt-3">
-                <div class="flex flex-column pb-4">
-                    <label for="username">Usuário</label>
-                    <input id="username" type="text" pInputText formControlName="userControl">
-                    <small [ngClass]="{'hidden' : loginForm.get('userControl')?.valid || !loginForm.get('userControl')?.touched}" id="username-help" class="p-error block">Usuário inválido.</small>
-                </div>
-                <div class="flex flex-column pb-4">
-                    <label for="password">Senha</label>
-                    <input id="password" type="password" pInputText formControlName="passwordControl" (keyup.enter)="login()">
-                    <small [ngClass]="{'hidden' : loginForm.get('passwordControl')?.valid || !loginForm.get('passwordControl')?.touched}" id="password-help" class="p-error block">Senha inválida.</small>
-                </div>
-        
-                <div class="pb-3">
-                    <button label="Entrar" (click)="login()"></button>
-                </div>
-        
-                <div class="flex justify-content-center">
-                    <a class="forgot-password" href="">Esqueci minha senha</a>
-                </div>
-            </form> -->
         </div>
 	</div>
 </div>

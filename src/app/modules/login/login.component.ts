@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 export class LoginComponent implements OnInit {
 
   loading: boolean = false;
+  errorMsg: string | undefined;
 
   loginForm: FormGroup = new FormGroup({
     userControl: new FormControl('', [Validators.required]),
@@ -44,13 +45,13 @@ export class LoginComponent implements OnInit {
         error: (error) => {
           console.error(error);
           this.loading = false;
-          // this.showMessage(MessageType.error, `Usuário e/ou senha inválido(s).`, 'Erro!');
+          this.errorMsg = 'Usuário e/ou senha inválido(s)';
         },
         complete: () => this.loading = false
       });
 
     } else {
-      // this.showMessage(MessageType.warn, `É necessário preencher os campos de Usuário e Senha com dados válidos.`, 'Erro!');
+      this.errorMsg = 'É necessário preencher os campos de Usuário e Senha com dados válidos';
     }
   }
 

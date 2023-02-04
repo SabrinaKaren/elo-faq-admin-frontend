@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from 'src/app/app-routing.module';
 import { RouterModule } from '@angular/router';
+import { MessagesModule } from 'primeng/messages';
+import { MessageModule } from 'primeng/message';
 
 @NgModule({
   declarations: [
@@ -17,7 +19,9 @@ import { RouterModule } from '@angular/router';
     AppRoutingModule,
     RouterModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    MessagesModule,
+    MessageModule
   ],
   exports: [
     LoginComponent
