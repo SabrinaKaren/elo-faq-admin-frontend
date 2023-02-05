@@ -1,3 +1,4 @@
+import { StructuralModule } from './modules/structural/structural.module';
 import { QuestionModule } from './modules/question/question.module';
 import { LoginModule } from './modules/login/login.module';
 import { CategoryModule } from './modules/category/category.module';
@@ -13,6 +14,7 @@ import { AppComponent } from './app.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    StructuralModule,
     CategoryModule,
     LoginModule,
     QuestionModule
