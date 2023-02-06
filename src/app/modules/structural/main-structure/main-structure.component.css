@@ -85,7 +85,7 @@ a {
 .content {
     margin: 82px auto 32px;
     padding: 0 16px;
-    max-width: 700px;
+    max-width: 80%;
 }
 
 svg#clouds {
@@ -94,4 +94,11 @@ svg#clouds {
     left: -230px;
     z-index: -10;
     width: 1920px;
+}
+
+/* para telas de largura igual ou menor a 1000px */
+@media only screen and (max-width: 1000px) {
+    .content {
+        max-width: 100%;
+    }
 }
