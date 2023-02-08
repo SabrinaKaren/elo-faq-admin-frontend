@@ -1,25 +1,23 @@
 <!-- mensagem sucesso/erro -->
 <p-toast></p-toast>
 
+<!-- loading -->
 <div *ngIf="loading; else notLoadingTemplate" class="flex justify-content-center">
-    <div class="card">
-        <div class="horizontal-loading"><div></div><div></div><div></div><div></div></div>
-    </div>
+    <app-loading></app-loading>
 </div>
-<!-- <p-progressBar *ngIf="loading; else notLoadingTemplate" mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar> -->
 
 <ng-template #notLoadingTemplate>
     <!-- tabela -->
     <div class="card">
         <p-toolbar styleClass="mb-4 gap-2">
             <ng-template pTemplate="left">
-                <button pButton pRipple label="Novo" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
-                <button pButton pRipple label="Deletar" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedCategories()" [disabled]="!selectedCategories || !selectedCategories.length"></button>
+                <button pButton pRipple label="Novo" icon="pi pi-plus" class="p-button-success mr-2" (click)="preparationNewCategory()"></button>
+                <button pButton pRipple label="Deletar" icon="pi pi-trash" class="p-button-danger" (click)="preparationDeleteSelectedCategories()" [disabled]="!selectedCategories || !selectedCategories.length"></button>
             </ng-template>
         </p-toolbar>
 
         <p-table
-            #dt
+            #categoryTable
             [value]="categories"
             [rows]="10"
             [paginator]="true"
@@ -33,13 +31,14 @@
 
             <!-- topo -->
             <ng-template pTemplate="caption">
-                <div class="flex align-items-center justify-content-between">
+                <div class="flex align-items-center justify-content-between m-3">
                     <h5 class="m-0">Gerir categorias</h5>
                     <span class="p-input-icon-left">
                         <i class="pi pi-search"></i>
-                        <input #searchInput pInputText type="text" (input)="dt.filterGlobal(searchInput.value, 'contains')" placeholder="Pesquisar..." />
+                        <input #searchInput pInputText type="text" (input)="categoryTable.filterGlobal(searchInput.value, 'contains')" placeholder="Pesquisar..." />
                     </span>
                 </div>
+                <p-progressBar *ngIf="loadingCRUD" mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
             </ng-template>
 
             <!-- cabeçalho -->
@@ -63,8 +62,8 @@
                     <td>{{category.id}}</td>
                     <td>{{category.name}}</td>
                     <td>
-                        <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editCategory(category)"></button>
-                        <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteCategory(category)"></button>
+                        <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="preparationEditCategory(category)"></button>
+                        <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="preparationDeleteCategory(category)"></button>
                     </td>
                 </tr>
             </ng-template>
@@ -83,23 +82,24 @@
 <!-- modal com formulário -->
 <p-dialog [(visible)]="showFormModal" [style]="{width: '450px'}" header="category Details" [modal]="true" styleClass="p-fluid">
     <ng-template pTemplate="content">
-        <div class="field">
-            <label for="id">Id</label>
-            <input type="text" pInputText id="id" [(ngModel)]="category.id" required autofocus />
-            <small class="p-error" *ngIf="submitted && !category.id">Id is required.</small>
-        </div>
-        <div class="field">
-            <label for="name">Name</label>
-            <input type="text" pInputText id="name" [(ngModel)]="category.name" required autofocus />
-            <small class="p-error" *ngIf="submitted && !category.name">Name is required.</small>
-        </div>
+        <form form [formGroup]="categoryForm">
+            <div class="field">
+                <label for="id">Id</label>
+                <input type="text" pInputText id="id" formControlName="idControl" readonly />
+            </div>
+            <div class="field">
+                <label for="name">Name</label>
+                <input type="text" pInputText id="name" formControlName="nameControl" required autofocus (keyup.enter)="saveCategory()" />
+                <small [ngClass]="{'hidden' : categoryForm.get('nameControl')?.valid || !categoryForm.get('nameControl')?.touched}" class="p-error block">Nome inválido.</small>
+            </div>
+        </form>
     </ng-template>
 
     <ng-template pTemplate="footer">
-        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveCategory()"></button>
+        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="showFormModal = false"></button>
+        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveCategory()" [disabled]="categoryForm.invalid"></button>
     </ng-template>
 </p-dialog>
 
 <!-- modal de confirmação -->
-<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+<p-confirmDialog [style]="{width: '450px'}" acceptLabel="Sim" rejectLabel="Não"></p-confirmDialog>

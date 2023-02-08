@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { CategoryService } from './category.service';
 
@@ -6,17 +7,25 @@ import { CategoryService } from './category.service';
   selector: 'app-category',
   templateUrl: './category.component.html',
   styleUrls: ['./category.component.css'],
+  encapsulation: ViewEncapsulation.None,
   providers: [MessageService, ConfirmationService]
 })
 export class CategoryComponent implements OnInit {
 
+  // controles
   loading: boolean = false;
+  loadingCRUD: boolean = false;
   showFormModal: boolean = false;
-  submitted: boolean = false;
 
+  // dados
   categories: any[] = [];
-  category: any;
   selectedCategories: any[] = [];
+
+  // formulário
+  categoryForm: FormGroup = new FormGroup({
+    idControl: new FormControl({value: '', disabled: true}),
+    nameControl: new FormControl('', [Validators.required, Validators.minLength(3)])
+  });
 
   constructor(
     private service: CategoryService,
@@ -28,6 +37,10 @@ export class CategoryComponent implements OnInit {
     this.getCategories();
   }
 
+  //******************************************************
+  //             Recuperando dados no backend
+  //******************************************************
+
   getCategories() {
     this.loading = true;
 
@@ -38,95 +51,157 @@ export class CategoryComponent implements OnInit {
         }
       },
       error: (error) => {
-        console.error(error);
         this.loading = false;
+        console.error(error);
+        this.messageService.add({
+          severity:'error',
+          summary: 'Erro',
+          detail: 'Erro ao tentar recuperar a lista de categorias',
+          life: 3000
+        });
       },
       complete: () => this.loading = false
     });
   }
 
-  openNew() {
-    this.category = {};
-    this.submitted = false;
+  //******************************************************
+  //                  Operações de CRUD
+  //******************************************************
+
+  saveCategory() {
+    if (this.categoryForm.valid) {
+
+      // se possuir id, significa que é update
+      if (this.categoryForm.get('idControl')?.value) this.updateCategory();
+
+      // se não possuir id, significa que é create
+      else this.createCategory();
+
+      this.showFormModal = false;
+      this.categoryForm.reset();
+
+    }
+  }
+
+  createCategory() {
+    this.loadingCRUD = true;
+
+    this.service.createCategory({
+      name: this.categoryForm.get('nameControl')?.value
+    }).subscribe({
+      next: (response) => {
+        if (response?.data) {
+          console.log('antes:', [...this.categories]);
+          this.categories = response.data;
+          console.log('depois:', [...this.categories]);
+          this.messageService.add({severity:'success', summary: 'Sucesso', detail: 'Categoria criada', life: 3000});
+        }
+      },
+      error: (error) => {
+        this.loadingCRUD = false;
+
+        console.error(error);
+        this.messageService.add({
+          severity:'error',
+          summary: 'Erro',
+          detail: `Erro ao tentar criar a categoria '${this.categoryForm.get('nameControl')?.value}'`,
+          life: 3000
+        });
+      },
+      complete: () => this.loadingCRUD = false
+    });
+  }
+
+  updateCategory() {
+    this.loadingCRUD = true;
+
+    this.service.updateCategory({
+      id: this.categoryForm.get('idControl')?.value,
+      name: this.categoryForm.get('nameControl')?.value
+    }).subscribe({
+      next: (response) => {
+        if (response?.data) {
+          this.categories = response.data;
+          this.messageService.add({severity:'success', summary: 'Sucesso', detail: 'Categoria editada', life: 3000});
+        }
+      },
+      error: (error) => {
+        this.loadingCRUD = false;
+
+        console.error(error);
+        this.messageService.add({
+          severity:'error',
+          summary: 'Erro',
+          detail: `Erro ao tentar deletar a categoria '${this.categoryForm.get('nameControl')?.value}'`,
+          life: 3000
+        });
+      },
+      complete: () => this.loadingCRUD = false
+    });
+  }
+
+  deleteCategory(category: any) {
+    this.loadingCRUD = true;
+
+    this.service.deleteCategory(category.id).subscribe({
+      next: (response) => {
+        if (response?.data) {
+          this.categories = response.data;
+          this.messageService.add({severity:'success', summary: 'Sucesso', detail: `A categoria '${category.name}' foi deletada`, life: 3000});
+        }
+      },
+      error: (error) => {
+        this.loadingCRUD = false;
+
+        console.error(error);
+        this.messageService.add({
+          severity:'error',
+          summary: 'Erro',
+          detail: `Erro ao tentar criar a categoria '${this.categoryForm.get('nameControl')?.value}'`,
+          life: 3000
+        });
+      },
+      complete: () => this.loadingCRUD = false
+    });
+  }
+
+  //******************************************************
+  //               Controles do formulário
+  //******************************************************
+
+  preparationNewCategory() {
+    this.categoryForm.reset();
     this.showFormModal = true;
   }
 
-  deleteSelectedCategories() {
+  preparationEditCategory(category: any) {
+    this.categoryForm.controls['idControl'].setValue(category.id);
+    this.categoryForm.controls['nameControl'].setValue(category.name);
+    this.showFormModal = true;
+  }
+
+  preparationDeleteSelectedCategories() {
     this.confirmationService.confirm({
       message: 'Você tem certeza de que deseja excluir as categorias selecionadas?',
       header: 'Confirmação',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.categories = this.categories.filter((val: any) => !this.selectedCategories.includes(val));
+        this.selectedCategories.forEach(item => this.deleteCategory(item));
         this.selectedCategories = [];
-        this.messageService.add({severity:'success', summary: 'Sucesso', detail: 'Categorias deletadas', life: 3000});
       }
     });
   }
 
-  editCategory(category: any) {
-    this.category = {...category};
-    this.showFormModal = true;
-  }
-
-  deleteCategory(category: any) {
+  preparationDeleteCategory(category: any) {
     this.confirmationService.confirm({
-      message: 'Você tem certeza de que deseja excluir ' + category.name + '?',
+      message: `Você tem certeza de que deseja excluir a categoria '${category.name}'?`,
       header: 'Confirmação',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.categories = this.categories.filter((val: any) => val.id !== category.id);
-        this.category = {};
-        this.messageService.add({severity:'success', summary: 'Sucesso', detail: 'Categoria deletada', life: 3000});
+        this.deleteCategory(category);
+        this.categoryForm.reset();
       }
     });
-  }
-
-  hideDialog() {
-    this.showFormModal = false;
-    this.submitted = false;
-  }
-
-  saveCategory() {
-    this.submitted = true;
-
-    if (this.category.name.trim()) {
-      if (this.category.id) {
-        this.categories[this.findIndexById(this.category.id)] = this.category;
-        this.messageService.add({severity:'success', summary: 'Sucesso', detail: 'Categoria editada', life: 3000});
-      }
-      else {
-        this.category.id = this.createId();
-        this.category.image = 'category-placeholder.svg';
-        this.categories.push(this.category);
-        this.messageService.add({severity:'success', summary: 'Sucesso', detail: 'Categoria criada', life: 3000});
-      }
-
-      this.categories = [...this.categories];
-      this.showFormModal = false;
-      this.category = {};
-    }
-  }
-
-  findIndexById(id: string): number {
-    let index = -1;
-    for (let i = 0; i < this.categories.length; i++) {
-      if (this.categories[i].id === id) {
-        index = i;
-        break;
-      }
-    }
-
-    return index;
-  }
-
-  createId(): string {
-    let id = '';
-    var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    for ( var i = 0; i < 5; i++ ) {
-      id += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return id;
   }
 
 }
