@@ -130,7 +130,7 @@ export class CategoryComponent implements OnInit {
         this.messageService.add({
           severity:'error',
           summary: 'Erro',
-          detail: `Erro ao tentar deletar a categoria '${this.categoryForm.get('nameControl')?.value}'`,
+          detail: `Erro ao tentar atualizar a categoria '${this.categoryForm.get('nameControl')?.value}'`,
           life: 3000
         });
       },
@@ -155,7 +155,7 @@ export class CategoryComponent implements OnInit {
         this.messageService.add({
           severity:'error',
           summary: 'Erro',
-          detail: `Erro ao tentar criar a categoria '${this.categoryForm.get('nameControl')?.value}'`,
+          detail: `Erro ao tentar deletar a categoria '${category.name}'`,
           life: 3000
         });
       },

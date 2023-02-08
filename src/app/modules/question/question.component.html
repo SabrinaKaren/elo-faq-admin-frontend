@@ -1,1 +1,119 @@
-<p>question works!</p>
+<!-- mensagem sucesso/erro -->
+<p-toast></p-toast>
+
+<!-- loading -->
+<div *ngIf="loading; else notLoadingTemplate" class="flex justify-content-center">
+    <app-loading></app-loading>
+</div>
+
+<ng-template #notLoadingTemplate>
+    <!-- tabela -->
+    <div class="card">
+        <p-toolbar styleClass="mb-4 gap-2">
+            <ng-template pTemplate="left">
+                <button pButton pRipple label="Novo" icon="pi pi-plus" class="p-button-success mr-2" (click)="preparationNewQuestion()"></button>
+                <button pButton pRipple label="Deletar" icon="pi pi-trash" class="p-button-danger" (click)="preparationDeleteSelectedQuestions()" [disabled]="!selectedQuestions || !selectedQuestions.length"></button>
+            </ng-template>
+        </p-toolbar>
+
+        <p-table
+            #questionTable
+            [value]="questions"
+            [rows]="10"
+            [paginator]="true"
+            [globalFilterFields]="['id','question','answer','categoryId']"
+            [(selection)]="selectedQuestions"
+            [rowHover]="true"
+            dataKey="id"
+            currentPageReportTemplate="Exibindo {first} a {last} de {totalRecords} registro(s)"
+            [showCurrentPageReport]="true"
+        >
+
+            <!-- topo -->
+            <ng-template pTemplate="caption">
+                <div class="flex align-items-center justify-content-between m-3">
+                    <h5 class="m-0">Gerir dúvidas</h5>
+                    <span class="p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input #searchInput pInputText type="text" (input)="questionTable.filterGlobal(searchInput.value, 'contains')" placeholder="Pesquisar..." />
+                    </span>
+                </div>
+                <p-progressBar *ngIf="loadingCRUD" mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
+            </ng-template>
+
+            <!-- cabeçalho -->
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="width: 4rem">
+                        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                    </th>
+                    <th pSortableColumn="id" style="min-width:15rem">Id<p-sortIcon field="id"></p-sortIcon></th>
+                    <th pSortableColumn="name" style="min-width:15rem">Dúvida<p-sortIcon field="question"></p-sortIcon></th>
+                    <th pSortableColumn="name" style="min-width:15rem">Resposta<p-sortIcon field="answer"></p-sortIcon></th>
+                    <th pSortableColumn="name" style="min-width:15rem">Categoria<p-sortIcon field="categoryId"></p-sortIcon></th>
+                    <th></th>
+                </tr>
+            </ng-template>
+
+            <!-- registros -->
+            <ng-template pTemplate="body" let-question>
+                <tr>
+                    <td>
+                        <p-tableCheckbox [value]="question"></p-tableCheckbox>
+                    </td>
+                    <td>{{question.id}}</td>
+                    <td>{{question.question}}</td>
+                    <td>{{question.answer}}</td>
+                    <td>{{question.categoryId}}</td>
+                    <td>
+                        <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="preparationEditQuestion(question)"></button>
+                        <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="preparationDeleteQuestion(question)"></button>
+                    </td>
+                </tr>
+            </ng-template>
+
+            <!-- rodapé -->
+            <ng-template pTemplate="summary">
+                <div class="flex align-items-center justify-content-between">
+                    No total existe {{questions ? questions.length : 0 }} {{questions.length > 1 ? 'dúvidas' : 'dúvida' }}.
+                </div>
+            </ng-template>
+
+        </p-table>
+    </div>
+</ng-template>
+
+<!-- modal com formulário -->
+<p-dialog [(visible)]="showFormModal" [style]="{width: '450px'}" header="Dúvida" [modal]="true" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <form form [formGroup]="questionForm">
+            <div class="field">
+                <label for="id">Id</label>
+                <input type="text" pInputText id="id" formControlName="idControl" readonly />
+            </div>
+            <div class="field">
+                <label for="name">Dúvida</label>
+                <input type="text" pInputText id="question" formControlName="questionControl" required autofocus />
+                <small [ngClass]="{'hidden' : questionForm.get('questionControl')?.valid || !questionForm.get('questionControl')?.touched}" class="p-error block">Dúvida inválida.</small>
+            </div>
+            <div class="field">
+                <label for="name">Resposta</label>
+                <input type="text" pInputText id="answer" formControlName="answerControl" required />
+                <small [ngClass]="{'hidden' : questionForm.get('answerControl')?.valid || !questionForm.get('answerControl')?.touched}" class="p-error block">Resposta inválida.</small>
+            </div>
+            <div class="field">
+                <label for="name">Categoria</label>
+                <input type="text" pInputText id="category-id" formControlName="categoryIdControl" required />
+                <small [ngClass]="{'hidden' : questionForm.get('categoryIdControl')?.valid || !questionForm.get('categoryIdControl')?.touched}" class="p-error block">Categoria inválida.</small>
+            </div>
+        </form>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="showFormModal = false"></button>
+        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveQuestion()" [disabled]="questionForm.invalid"></button>
+    </ng-template>
+</p-dialog>
+
+<!-- modal de confirmação -->
+<p-confirmDialog [style]="{width: '450px'}" acceptLabel="Sim" rejectLabel="Não"></p-confirmDialog>

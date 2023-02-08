@@ -9,8 +9,7 @@ export class CategoryService {
   categoriesMock: any[];
 
   constructor() {
-    this.categoriesMock = [ {"name": "Gerais"}, {"name": "Login"}, {"name": "Cadastro"} ];
-    this.categoriesMock.forEach(item => item.id = this.createId());
+    this.categoriesMock = [ {id: '94189', name: 'Gerais'}, {id: '46536', name: 'Login'}, {id: '96007',name: 'Cadastro'} ];
   }
 
   getCategories(): Observable<any> {

@@ -47,8 +47,8 @@
                     <th style="width: 4rem">
                         <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                     </th>
-                    <th pSortableColumn="id" style="min-width:15rem">Id <p-sortIcon field="id"></p-sortIcon></th>
-                    <th pSortableColumn="name" style="min-width:15rem">Name <p-sortIcon field="name"></p-sortIcon></th>
+                    <th pSortableColumn="id" style="min-width:15rem">Id<p-sortIcon field="id"></p-sortIcon></th>
+                    <th pSortableColumn="name" style="min-width:15rem">Nome<p-sortIcon field="name"></p-sortIcon></th>
                     <th></th>
                 </tr>
             </ng-template>
@@ -80,7 +80,7 @@
 </ng-template>
 
 <!-- modal com formulário -->
-<p-dialog [(visible)]="showFormModal" [style]="{width: '450px'}" header="category Details" [modal]="true" styleClass="p-fluid">
+<p-dialog [(visible)]="showFormModal" [style]="{width: '450px'}" header="Categoria" [modal]="true" styleClass="p-fluid">
     <ng-template pTemplate="content">
         <form form [formGroup]="categoryForm">
             <div class="field">
