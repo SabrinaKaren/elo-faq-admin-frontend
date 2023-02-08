@@ -91,9 +91,7 @@ export class CategoryComponent implements OnInit {
     }).subscribe({
       next: (response) => {
         if (response?.data) {
-          console.log('antes:', [...this.categories]);
           this.categories = response.data;
-          console.log('depois:', [...this.categories]);
           this.messageService.add({severity:'success', summary: 'Sucesso', detail: 'Categoria criada', life: 3000});
         }
       },

@@ -24,7 +24,7 @@ export class CategoryService {
     this.categoriesMock.push(category);
     return of({
       "data": this.categoriesMock
-    }).pipe(delay(5000));
+    }).pipe(delay(500));
   }
 
   updateCategory(category: CategoryModel): Observable<any> {
