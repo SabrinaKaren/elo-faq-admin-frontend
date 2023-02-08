@@ -62,8 +62,8 @@
                         <p-tableCheckbox [value]="question"></p-tableCheckbox>
                     </td>
                     <td>{{question.id}}</td>
-                    <td>{{question.question}}</td>
-                    <td>{{question.answer}}</td>
+                    <td>{{(question.question.length>50)? (question.question | slice:0:50)+'...':(question.question)}}</td>
+                    <td>{{(question.answer.length>40)? (question.answer | slice:0:40)+'...':(question.answer)}}</td>
                     <td>{{question.categoryId}}</td>
                     <td>
                         <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="preparationEditQuestion(question)"></button>
@@ -84,12 +84,33 @@
 </ng-template>
 
 <!-- modal com formulário -->
-<p-dialog [(visible)]="showFormModal" [style]="{width: '450px'}" header="Dúvida" [modal]="true" styleClass="p-fluid">
+<p-dialog [(visible)]="showFormModal" [style]="{width: '600px'}" header="Dúvida" [modal]="true" styleClass="p-fluid">
     <ng-template pTemplate="content">
         <form form [formGroup]="questionForm">
-            <div class="field">
-                <label for="id">Id</label>
-                <input type="text" pInputText id="id" formControlName="idControl" readonly />
+
+            <div class="grid p-fluid">
+                <div class="col-12 md:col-4">
+                    <div class="field">
+                        <label for="id">Id</label>
+                        <input type="text" pInputText id="id" formControlName="idControl" readonly />
+                    </div>
+                </div>
+                
+                <div class="col-12 md:col-8">
+                    <div class="field">
+                        <label>Categoria</label>
+                        <p-dropdown
+                            [options]="categories"
+                            optionLabel="name"
+                            formControlName="categoryControl"
+                            [showClear]="true"
+                            [autoDisplayFirst]="false"
+                            emptyMessage="Nenhum registro foi encontrado."
+                            emptyFilterMessage="Nenhum resultado encontrado."
+                        ></p-dropdown>
+                        <small [ngClass]="{'hidden' : questionForm.get('categoryControl')?.valid || !questionForm.get('categoryControl')?.touched}" class="p-error block">Categoria inválida.</small>
+                    </div>
+                </div>
             </div>
             <div class="field">
                 <label for="name">Dúvida</label>
@@ -98,13 +119,8 @@
             </div>
             <div class="field">
                 <label for="name">Resposta</label>
-                <input type="text" pInputText id="answer" formControlName="answerControl" required />
+                <textarea type="text" pInputText id="answer" formControlName="answerControl" required></textarea>
                 <small [ngClass]="{'hidden' : questionForm.get('answerControl')?.valid || !questionForm.get('answerControl')?.touched}" class="p-error block">Resposta inválida.</small>
-            </div>
-            <div class="field">
-                <label for="name">Categoria</label>
-                <input type="text" pInputText id="category-id" formControlName="categoryIdControl" required />
-                <small [ngClass]="{'hidden' : questionForm.get('categoryIdControl')?.valid || !questionForm.get('categoryIdControl')?.touched}" class="p-error block">Categoria inválida.</small>
             </div>
         </form>
     </ng-template>

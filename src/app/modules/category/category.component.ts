@@ -41,7 +41,7 @@ export class CategoryComponent implements OnInit {
   //             Recuperando dados no backend
   //******************************************************
 
-  getCategories() {
+  private getCategories() {
     this.loading = true;
 
     this.service.getCategories().subscribe({
@@ -83,7 +83,7 @@ export class CategoryComponent implements OnInit {
     }
   }
 
-  createCategory() {
+  private createCategory() {
     this.loadingCRUD = true;
 
     this.service.createCategory({
@@ -110,7 +110,7 @@ export class CategoryComponent implements OnInit {
     });
   }
 
-  updateCategory() {
+  private updateCategory() {
     this.loadingCRUD = true;
 
     this.service.updateCategory({
@@ -138,7 +138,7 @@ export class CategoryComponent implements OnInit {
     });
   }
 
-  deleteCategory(category: any) {
+  private deleteCategory(category: any) {
     this.loadingCRUD = true;
 
     this.service.deleteCategory(category.id).subscribe({

@@ -21,13 +21,14 @@ export class QuestionComponent implements OnInit {
   // dados
   questions: any[] = [];
   selectedQuestions: any[] = [];
+  categories: any[] = [];
 
   // formulário
   questionForm: FormGroup = new FormGroup({
     idControl: new FormControl({value: '', disabled: true}),
-    questionControl: new FormControl('', [Validators.required, Validators.minLength(5)]),
+    questionControl: new FormControl('', [Validators.required]),
     answerControl: new FormControl('', [Validators.required, Validators.minLength(5)]),
-    categoryIdControl: new FormControl('', [Validators.required, Validators.minLength(1)])
+    categoryControl: new FormControl(undefined, [Validators.required, Validators.minLength(1)])
   });
 
   constructor(
@@ -39,13 +40,14 @@ export class QuestionComponent implements OnInit {
 
   ngOnInit() {
     this.getQuestions();
+    this.getCategoriesToDropdown();
   }
 
   //******************************************************
   //             Recuperando dados no backend
   //******************************************************
 
-  getQuestions() {
+  private getQuestions() {
     this.loading = true;
 
     this.service.getQuestions().subscribe({
@@ -68,6 +70,26 @@ export class QuestionComponent implements OnInit {
     });
   }
 
+  // Pesquisando e montando a lista para o dropdown de categorias
+  private getCategoriesToDropdown() {
+    this.categoryService.getCategories().subscribe({
+      next: (response) => {
+        if (response?.data) {
+          this.categories = response.data;
+        }
+      },
+      error: (error) => {
+        console.error(error);
+        this.messageService.add({
+          severity:'error',
+          summary: 'Erro',
+          detail: 'Erro ao tentar recuperar a lista de categorias',
+          life: 3000
+        });
+      }
+    });
+  }
+
   //******************************************************
   //                  Operações de CRUD
   //******************************************************
@@ -87,13 +109,13 @@ export class QuestionComponent implements OnInit {
     }
   }
 
-  createQuestion() {
+  private createQuestion() {
     this.loadingCRUD = true;
 
     this.service.createQuestion({
       question: this.questionForm.get('questionControl')?.value,
       answer: this.questionForm.get('answerControl')?.value,
-      categoryId: this.questionForm.get('categoryIdControl')?.value
+      categoryId: this.questionForm.get('categoryControl')?.value.id
     }).subscribe({
       next: (response) => {
         if (response?.data) {
@@ -116,14 +138,14 @@ export class QuestionComponent implements OnInit {
     });
   }
 
-  updateQuestion() {
+  private updateQuestion() {
     this.loadingCRUD = true;
 
     this.service.updateQuestion({
       id: this.questionForm.get('idControl')?.value,
       question: this.questionForm.get('questionControl')?.value,
       answer: this.questionForm.get('answerControl')?.value,
-      categoryId: this.questionForm.get('categoryIdControl')?.value
+      categoryId: this.questionForm.get('categoryControl')?.value.id
     }).subscribe({
       next: (response) => {
         if (response?.data) {
@@ -146,7 +168,7 @@ export class QuestionComponent implements OnInit {
     });
   }
 
-  deleteQuestion(question: any) {
+  private deleteQuestion(question: any) {
     this.loadingCRUD = true;
 
     this.service.deleteQuestion(question.id).subscribe({
@@ -184,7 +206,11 @@ export class QuestionComponent implements OnInit {
     this.questionForm.controls['idControl'].setValue(question.id);
     this.questionForm.controls['questionControl'].setValue(question.question);
     this.questionForm.controls['answerControl'].setValue(question.answer);
-    this.questionForm.controls['categoryIdControl'].setValue(question.categoryId);
+
+    // encontrando a categoria na lista de categorias para passar o item para o categoryControl
+    const categoryOfThisQuestion = this.categories.find(item => item.id == question.categoryId) ;
+    if (categoryOfThisQuestion) this.questionForm.controls['categoryControl'].setValue(categoryOfThisQuestion);
+    
     this.showFormModal = true;
   }
 

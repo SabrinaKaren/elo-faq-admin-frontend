@@ -1,3 +1,4 @@
+import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
 import { ToolbarModule } from 'primeng/toolbar';
 import { SharedModule } from './../../shared/shared.module';
@@ -10,6 +11,7 @@ import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ProgressBarModule } from 'primeng/progressbar';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,9 @@ import { ProgressBarModule } from 'primeng/progressbar';
     SharedModule,
     ToolbarModule,
     ProgressBarModule,
-    InputTextModule
+    InputTextModule,
+    InputTextareaModule,
+    DropdownModule
   ],
   exports: [
     QuestionComponent
