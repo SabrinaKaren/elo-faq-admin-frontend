@@ -1,3 +1,4 @@
+import { AngularTemplatesComponent } from './modules/angular-templates/angular-templates.component';
 import { LogoutComponent } from './modules/logout/logout.component';
 import { LoginGuardService } from './shared/guards/login-guard.service';
 import { QuestionComponent } from './modules/question/question.component';
@@ -18,7 +19,8 @@ const routes: Routes = [
       { path: 'categoria', component: CategoryComponent },
       { path: 'duvida', component: QuestionComponent }
     ]
-  }
+  },
+  { path: 'angular-templates', component: AngularTemplatesComponent }
 ];
 
 @NgModule({

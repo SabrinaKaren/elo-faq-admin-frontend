@@ -1,3 +1,4 @@
+import { AngularTemplatesModule } from './modules/angular-templates/angular-templates.module';
 import { StructuralModule } from './modules/structural/structural.module';
 import { QuestionModule } from './modules/question/question.module';
 import { LoginModule } from './modules/login/login.module';
@@ -17,7 +18,8 @@ import { AppComponent } from './app.component';
     StructuralModule,
     CategoryModule,
     LoginModule,
-    QuestionModule
+    QuestionModule,
+    AngularTemplatesModule
   ],
   providers: [],
   bootstrap: [AppComponent]
