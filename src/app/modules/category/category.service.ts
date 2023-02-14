@@ -9,7 +9,7 @@ export class CategoryService {
   categoriesMock: any[];
 
   constructor() {
-    this.categoriesMock = [ {id: '94189', name: 'Gerais'}, {id: '46536', name: 'Login'}, {id: '96007',name: 'Cadastro'} ];
+    this.categoriesMock = [ {id: '94189', name: 'Trocas e cancelamentos'}, {id: '46536', name: 'Entrega'}, {id: '96007', name: 'Pedidos e Pagamentos'} ];
   }
 
   getCategories(): Observable<any> {

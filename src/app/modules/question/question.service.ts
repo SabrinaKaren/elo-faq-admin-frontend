@@ -10,9 +10,9 @@ export class QuestionService {
 
   constructor() {
     this.questionsMock = [
-      { question: 'Como logar no sistema?', answer: 'Basta na página de login inserir seu usuário e senha, e depois confirmar no botão.', categoryId: '46536' },
-      { question: 'Como me cadastrar no sistema?', answer: 'Basta na página de cadastro preencher o formulário com seus dados, e depois confirmar no botão.', categoryId: '96007' },
-      { question: 'É possível encontrar em contato com o suporte?', answer: 'Sim, na página de suporte tem uma lista de opções de formas de contato, basta escolher a melhor para você.', categoryId: '94189' }
+      { question: 'Como faço para rastrear meu pedido?', answer: 'Você pode acompanhar o seu pedido pelo app ou site.', categoryId: '46536' },
+      { question: 'Qual o prazo de aprovação do pedido?', answer: 'O prazo para a aprovação do pedido, depende da forma de pagamento escolhida no momento da compra.', categoryId: '96007' },
+      { question: 'O que é e como visualizo o vale-compra?', answer: 'O vale-compra é a opção de troca, onde o total pago pelo produto devolvido, fica disponível para você realizar uma nova compra.', categoryId: '94189' }
     ];
     this.questionsMock.forEach(item => item.id = this.createId());
   }
