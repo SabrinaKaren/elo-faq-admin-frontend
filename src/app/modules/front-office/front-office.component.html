@@ -1,8 +1,6 @@
 <div class="front-office">
     <div class="front-office-content">
-        <h3>Aplicação Front Office</h3>
-        <h4>Simulação da tela de FAQ do usuário/consumidor final do produto</h4>
-        <div class="grid pt-3">
+        <div class="grid">
             <div class="col-fixed" style="width: 271px;">
                 <div id="vertical-menu">
                     <ul>
@@ -15,11 +13,17 @@
                 </div>
             </div>
             <div class="col questions-content">
+                <h3>Aplicação Front Office</h3>
+                <h4>Simulação da tela de FAQ do usuário/consumidor final do produto</h4>
                 <div *ngIf="loadingQuestions; else notLoadingTemplate" class="flex justify-content-center">
                     <app-loading></app-loading>
                 </div>
                 <ng-template #notLoadingTemplate>
-                    <span>{{questions | json}}</span>
+                    <p-accordion>
+                        <p-accordionTab *ngFor="let question of questions" [header]="question.question">
+                            <p>{{question.answer}}</p>
+                        </p-accordionTab>
+                    </p-accordion>
                 </ng-template>
             </div>
         </div>
