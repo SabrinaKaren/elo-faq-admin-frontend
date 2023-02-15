@@ -1,3 +1,4 @@
+import { FrontOfficeModule } from './modules/front-office/front-office.module';
 import { AngularTemplatesModule } from './modules/angular-templates/angular-templates.module';
 import { StructuralModule } from './modules/structural/structural.module';
 import { QuestionModule } from './modules/question/question.module';
@@ -19,7 +20,8 @@ import { AppComponent } from './app.component';
     CategoryModule,
     LoginModule,
     QuestionModule,
-    AngularTemplatesModule
+    AngularTemplatesModule,
+    FrontOfficeModule
   ],
   providers: [],
   bootstrap: [AppComponent]

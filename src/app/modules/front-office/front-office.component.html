@@ -1,0 +1,23 @@
+<div class="front-office">
+    <div class="front-office-content">
+        <div class="flex gap-6">
+            <div id="vertical-menu">
+                <ul>
+                    <li *ngFor="let item of categories; let i=index" class="flex gap-2" (click)="selectedCategory(i)" [ngClass]="{'active': item.active}">
+                        <div class="flex flex-column">
+                            <span class="vertical-menu-item-title">{{item.name}}</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div>
+                <div *ngIf="loadingQuestions; else notLoadingTemplate" class="flex justify-content-center">
+                    <app-loading></app-loading>
+                </div>
+                <ng-template #notLoadingTemplate>
+                    <span>{{questions | json}}</span>
+                </ng-template>
+            </div>
+        </div>
+    </div>
+</div>

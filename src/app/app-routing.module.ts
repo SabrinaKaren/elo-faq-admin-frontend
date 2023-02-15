@@ -1,3 +1,4 @@
+import { FrontOfficeComponent } from './modules/front-office/front-office.component';
 import { AngularTemplatesComponent } from './modules/angular-templates/angular-templates.component';
 import { LogoutComponent } from './modules/logout/logout.component';
 import { LoginGuardService } from './shared/guards/login-guard.service';
@@ -20,7 +21,8 @@ const routes: Routes = [
       { path: 'duvida', component: QuestionComponent }
     ]
   },
-  { path: 'angular-templates', component: AngularTemplatesComponent }
+  { path: 'angular-templates', component: AngularTemplatesComponent },
+  { path: 'front-office', component: FrontOfficeComponent }
 ];
 
 @NgModule({
