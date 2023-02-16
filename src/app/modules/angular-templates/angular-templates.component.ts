@@ -18,8 +18,8 @@ export class AngularTemplatesComponent implements OnInit {
     alert('Event binding... simples né!?');
   }
 
-  outputClicked() {
-    alert('@Output... simples né!?');
+  outputClicked(event: any) {
+    alert(event);
   }
 
 }

@@ -33,7 +33,7 @@
         <span>@Input para enviar dados para o filho.</span>
         <span>@Output para enviar dados para o pai. __</span>
         <hr>
-        <app-primary-button label="Clique-me" (clickEmitter)="outputClicked()"></app-primary-button>
+        <app-primary-button label="Me clique" (clickEmitter)="outputClicked($event)"></app-primary-button>
     </div>
 
 </div>

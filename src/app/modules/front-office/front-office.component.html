@@ -22,7 +22,11 @@
                     <app-loading></app-loading>
                 </div>
                 <ng-template #notLoadingTemplate>
-                    <!-- TODO: adicionar as perguntas e respostas aqui -->
+                    <p-accordion *ngFor="let question of questions">
+                        <p-accordionTab [header]="question.question">
+                           {{question.answer}}
+                        </p-accordionTab>
+                    </p-accordion>
                 </ng-template>
             </div>
         </div>
