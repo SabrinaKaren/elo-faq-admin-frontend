@@ -3,6 +3,9 @@
         <div class="grid">
             <div class="col-fixed" style="width: 271px;">
                 <div id="vertical-menu">
+                    <div class="py-1">
+                        <span class="vertical-menu-title">Categorias</span>
+                    </div>
                     <ul>
                         <li *ngFor="let item of categories; let i=index" class="flex gap-2" (click)="selectedCategory(i)" [ngClass]="{'active': item.active}">
                             <div class="flex flex-column">

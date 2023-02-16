@@ -43,7 +43,6 @@ export class FrontOfficeComponent implements OnInit {
               active: false
             });
           });
-          this.categories[0].active = true;
         }
       },
       error: (error) => {
