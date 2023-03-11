@@ -1,17 +1,23 @@
+import { environment } from './../../../environments/environment';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { delay, Observable, of } from 'rxjs';
+import { map, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
 
-  constructor() { }
+  constructor(
+    private http: HttpClient
+  ) { }
 
   login(user: string, password: string): Observable<any> {
-    return of({
-      "accessToken": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwYWluZWwiLCJpYXQiOjE2NzUzNjE2MjQsImV4cCI6MTY3NTQyMjEwNCwidXNlcm5hbWUiOiJwYWluZWwiLCJuYW1lIjoicGFpbmVsIiwicHJvY3VyYWNhbyI6Ii0xIiwicm9sZXMiOlsiUk9MRV9VU0VSIl0sImR0ZVRva2VuIjoiIn0.ugJpUVGyIngrWME-C0dxBG3KlT3-N2GyyMI573ZSL0kWo6EsSqjAbjZMpxdFzMYMQMcUTnqvJKrMQrk18CYUJA"
-    }).pipe(delay(2000));
+    return this.http
+      .post(
+        `${environment.apiBaseUrl}/auth/authenticate`,
+        { email: user, password }
+      ).pipe(map( response => response ));
   }
 
 }

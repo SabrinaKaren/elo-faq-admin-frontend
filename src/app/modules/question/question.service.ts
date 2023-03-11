@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { delay, Observable, of } from 'rxjs';
 
@@ -8,7 +9,9 @@ export class QuestionService {
 
   questionsMock: QuestionModel[];
 
-  constructor() {
+  constructor(
+    private http: HttpClient
+  ) {
     this.questionsMock = [
       { question: 'Como faço para rastrear meu pedido?', answer: 'Você pode acompanhar o seu pedido pelo app ou site.', categoryId: '46536' },
       { question: 'Qual o prazo de aprovação do pedido?', answer: 'O prazo para a aprovação do pedido, depende da forma de pagamento escolhida no momento da compra.', categoryId: '96007' },
@@ -25,12 +28,14 @@ export class QuestionService {
     this.questionsMock.forEach(item => item.id = this.createId());
   }
 
+  // TODO: retirar mock
   getQuestions(): Observable<any> {
     return of({
       "data": this.questionsMock
     }).pipe(delay(500));
   }
 
+  // TODO: retirar mock
   getQuestionsByCategoryId(categoryId: string): Observable<any> {
     let questionsByCategoryId = this.questionsMock.filter(item => item.categoryId == categoryId);
     return of({
@@ -38,6 +43,7 @@ export class QuestionService {
     }).pipe(delay(500));
   }
 
+  // TODO: retirar mock
   createQuestion(question: QuestionModel): Observable<any> {
     question.id = this.createId(); // adicionando um id
     this.questionsMock.push(question);
@@ -46,6 +52,7 @@ export class QuestionService {
     }).pipe(delay(500));
   }
 
+  // TODO: retirar mock
   updateQuestion(question: QuestionModel): Observable<any> {
     let questionToDeleteIndex = this.questionsMock.findIndex((item: any) => item.id == question.id);
     if (questionToDeleteIndex > -1) this.questionsMock[questionToDeleteIndex] = question;
@@ -54,6 +61,7 @@ export class QuestionService {
     }).pipe(delay(500));
   }
 
+  // TODO: retirar mock
   deleteQuestion(id: string): Observable<any> {
     let questionToDeleteIndex = this.questionsMock.findIndex((item: any) => item.id == id);
     if (questionToDeleteIndex > -1) this.questionsMock.splice(questionToDeleteIndex, 1);

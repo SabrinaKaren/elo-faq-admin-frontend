@@ -13,8 +13,7 @@ export class AuthGuardChildService implements CanActivateChild {
   ) { }
   
   canActivateChild(): any {
-    let user: any = this.context.getUserData();
-    if (user?.accessToken) {
+    if (this.context.getUserData()) {
       return true;
     } else {
       this.router.navigate(['login']);

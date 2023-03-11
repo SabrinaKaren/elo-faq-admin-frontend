@@ -37,8 +37,8 @@ export class LoginComponent implements OnInit {
         this.loginForm.get('passwordControl')!.value
       ).subscribe({
         next: (response) => {
-          if (response) {
-            this.context.saveUserData(response);
+          if (response?.token) {
+            this.context.saveUserData(response.token);
             this.router.navigate(['']);
           }
         },

@@ -13,8 +13,7 @@ export class LoginGuardService implements CanActivate {
   ) { }
 
   canActivate(): any {
-    let user: any = this.context.getUserData();
-    if (user?.accessToken) {
+    if (this.context.getUserData()) {
       this.router.navigate(['']);
       return false;
     } else {

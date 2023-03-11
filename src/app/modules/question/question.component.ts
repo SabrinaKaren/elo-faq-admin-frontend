@@ -119,7 +119,7 @@ export class QuestionComponent implements OnInit {
     }).subscribe({
       next: (response) => {
         if (response?.data) {
-          this.questions = response.data;
+          this.getQuestions();
           this.messageService.add({severity:'success', summary: 'Sucesso', detail: 'Dúvida criada', life: 3000});
         }
       },
@@ -149,7 +149,7 @@ export class QuestionComponent implements OnInit {
     }).subscribe({
       next: (response) => {
         if (response?.data) {
-          this.questions = response.data;
+          this.getQuestions();
           this.messageService.add({severity:'success', summary: 'Sucesso', detail: 'Dúvida editada', life: 3000});
         }
       },
@@ -174,7 +174,7 @@ export class QuestionComponent implements OnInit {
     this.service.deleteQuestion(question.id).subscribe({
       next: (response) => {
         if (response?.data) {
-          this.questions = response.data;
+          this.getQuestions();
           this.messageService.add({severity:'success', summary: 'Sucesso', detail: `A dúvida de id '${question.id}' foi deletada`, life: 3000});
         }
       },

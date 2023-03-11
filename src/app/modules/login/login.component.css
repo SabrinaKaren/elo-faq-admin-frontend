@@ -42,7 +42,7 @@ label {
 }
 
 input {
-	width: 60%;
+	width: 80%;
 	height: 30px;
 	background: #e0dede;
 	justify-content: center;
@@ -64,7 +64,7 @@ small {
 }
 
 button {
-	width: 60%;
+	width: 80%;
 	height: 40px;
 	margin: 10px auto;
 	justify-content: center;

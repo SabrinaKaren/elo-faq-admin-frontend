@@ -91,7 +91,7 @@ export class CategoryComponent implements OnInit {
     }).subscribe({
       next: (response) => {
         if (response?.data) {
-          this.categories = response.data;
+          this.getCategories();
           this.messageService.add({severity:'success', summary: 'Sucesso', detail: 'Categoria criada', life: 3000});
         }
       },
@@ -119,7 +119,7 @@ export class CategoryComponent implements OnInit {
     }).subscribe({
       next: (response) => {
         if (response?.data) {
-          this.categories = response.data;
+          this.getCategories();
           this.messageService.add({severity:'success', summary: 'Sucesso', detail: 'Categoria editada', life: 3000});
         }
       },
@@ -144,7 +144,7 @@ export class CategoryComponent implements OnInit {
     this.service.deleteCategory(category.id).subscribe({
       next: (response) => {
         if (response?.data) {
-          this.categories = response.data;
+          this.getCategories();
           this.messageService.add({severity:'success', summary: 'Sucesso', detail: `A categoria '${category.name}' foi deletada`, life: 3000});
         }
       },

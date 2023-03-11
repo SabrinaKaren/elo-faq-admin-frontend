@@ -1,4 +1,6 @@
-import { delay, Observable, of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { environment } from './../../../environments/environment';
+import { map, Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -6,52 +8,36 @@ import { Injectable } from '@angular/core';
 })
 export class CategoryService {
 
-  categoriesMock: any[];
+  endpoint: string;
 
-  constructor() {
-    this.categoriesMock = [ {id: '94189', name: 'Trocas e cancelamentos'}, {id: '46536', name: 'Entrega'}, {id: '96007', name: 'Pedidos e Pagamentos'} ];
+  constructor(
+    private http: HttpClient
+  ) {
+    this.endpoint = `${environment.apiBaseUrl}/category`;
   }
 
   getCategories(): Observable<any> {
-    return of({
-      "data": this.categoriesMock
-    }).pipe(delay(500));
+    return this.http
+      .get(this.endpoint)
+      .pipe(map( response => response ));
   }
 
   createCategory(category: CategoryModel): Observable<any> {
-    category.id = this.createId(); // adicionando um id
-    this.categoriesMock.push(category);
-    return of({
-      "data": this.categoriesMock
-    }).pipe(delay(500));
+    return this.http
+      .post(this.endpoint, { name: category.name })
+      .pipe(map( response => response ));
   }
 
   updateCategory(category: CategoryModel): Observable<any> {
-    let categoryToDeleteIndex = this.categoriesMock.findIndex((item: any) => item.id == category.id);
-    if (categoryToDeleteIndex > -1) this.categoriesMock[categoryToDeleteIndex] = category;
-    return of({
-      "data": this.categoriesMock
-    }).pipe(delay(500));
+    return this.http
+      .put(this.endpoint, { name: category.name, id: category.id })
+      .pipe(map( response => response ));
   }
 
   deleteCategory(id: string): Observable<any> {
-    let categoryToDeleteIndex = this.categoriesMock.findIndex((item: any) => item.id == id);
-    if (categoryToDeleteIndex > -1) this.categoriesMock.splice(categoryToDeleteIndex, 1);
-    return of({
-      "data": this.categoriesMock
-    }).pipe(delay(500));
-  }
-
-  private createId(): string {
-    const length = 5;
-    var possibleCharacters = '0123456789';
-
-    var generatedId = '';
-    for (let i=0; i<length; i++) {
-      generatedId += possibleCharacters.charAt(Math.floor(Math.random() * possibleCharacters.length));
-    }
-
-    return generatedId;
+    return this.http
+      .delete(`${this.endpoint}/${id}`)
+      .pipe(map( response => response ));
   }
 
 }
