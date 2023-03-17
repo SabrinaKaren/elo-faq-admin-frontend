@@ -62,9 +62,9 @@
                         <p-tableCheckbox [value]="question"></p-tableCheckbox>
                     </td>
                     <td>{{question.id}}</td>
-                    <td>{{(question.question.length>50)? (question.question | slice:0:50)+'...':(question.question)}}</td>
-                    <td>{{(question.answer.length>40)? (question.answer | slice:0:40)+'...':(question.answer)}}</td>
-                    <td>{{question.categoryId}}</td>
+                    <td>{{(question.question?.length>50)? (question.question | slice:0:50)+'...':(question.question)}}</td>
+                    <td>{{(question.answer?.length>40)? (question.answer | slice:0:40)+'...':(question.answer)}}</td>
+                    <td>{{question?.categoryId}}</td>
                     <td>
                         <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="preparationEditQuestion(question)"></button>
                         <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="preparationDeleteQuestion(question)"></button>
